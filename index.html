@@ -22,169 +22,50 @@
       -webkit-font-smoothing:antialiased;
     }
     a{color:var(--accent)}
-    /* page frame */
     .wrap{
       flex:1;
       display:flex;
       flex-direction:column;
       width:min(1200px,96vw);
       margin:0 auto;
-      padding:40px 20px 24px; /* keep header/footer padding */
+      padding:40px 20px 24px;
       box-sizing:border-box;
       min-height:calc(100vh - 64px);
     }
-
-    /* main two-column layout */
     .layout{
       display:grid;
       grid-template-columns:minmax(220px,40%) 1fr;
       gap:18px;
-      align-items:start; /* align both columns to the top */
+      align-items:start;
       flex:1;
     }
-
-    /* left column */
-    .left{
-      padding-right:6px;
-      display:flex;
-      flex-direction:column;
-    }
+    .left{padding-right:6px;display:flex;flex-direction:column}
     h1{margin:0 0 14px;font-size:30px}
     p{margin:0 0 20px;color:var(--muted)}
     h2{margin:20px 0 12px;font-size:16px}
     ul{margin:8px 0 0 20px;color:var(--muted)}
-    .discord-btn{
-      display:inline-block;
-      margin-top:16px;
-      padding:10px 14px;
-      background:#5865F2;
-      color:#fff;
-      border-radius:6px;
-      text-decoration:none;
-      font-weight:600;
-    }
-
-    /* filler area under discord btn (contains player heads grid and rules) */
-    .left-filler{
-      margin-top:16px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      max-height: calc(100vh - 220px);
-      overflow:auto;
-      padding-right:6px;
-    }
-    .left-filler h3{
-      margin:0;
-      font-size:14px;
-      color:var(--muted);
-      font-weight:600;
-    }
-
-    /* heads grid */
-    .heads-grid{
-      display:grid;
-      grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
-      gap:10px;
-      align-items:start;
-    }
-    .head{
-      width:56px;
-      height:56px;
-      border-radius:8px;
-      background:transparent;        /* removed background */
-      display:inline-block;
-      overflow:hidden;
-      position:relative;
-      cursor:pointer;
-      transition:transform .12s ease; /* removed box-shadow */
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    .head img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      background:transparent;        /* ensure no background color */
-    }
-    .head:hover{
-      transform:scale(1.08);
-      z-index:2;
-    }
-    .head .label{
-      position:absolute;
-      left:50%;
-      transform:translate(-50%, 6px);
-      bottom:6px;
-      background:rgba(0,0,0,0.7);
-      color:#fff;
-      padding:4px 8px;
-      border-radius:999px;
-      font-size:11px;
-      white-space:nowrap;
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .12s ease, transform .12s ease;
-    }
-    .head:hover .label{
-      opacity:1;
-      transform:translate(-50%, -6px);
-    }
-
-    /* rules box */
-    .rules {
-      background:var(--card);
-      border-radius:8px;
-      padding:10px;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.35;
-    }
-
-    /* right column / slider */
+    .discord-btn{display:inline-block;margin-top:16px;padding:10px 14px;background:#5865F2;color:#fff;border-radius:6px;text-decoration:none;font-weight:600}
+    .left-filler{margin-top:16px;display:flex;flex-direction:column;gap:12px;max-height: calc(100vh - 220px);overflow:auto;padding-right:6px}
+    .left-filler h3{margin:0;font-size:14px;color:var(--muted);font-weight:600}
+    .heads-grid{display:grid;grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));gap:10px;align-items:start}
+    .head{width:56px;height:56px;border-radius:8px;background:transparent;display:inline-block;overflow:hidden;position:relative;cursor:pointer;transition:transform .12s ease;display:flex;align-items:center;justify-content:center}
+    .head img{width:100%;height:100%;object-fit:cover;display:block;background:transparent}
+    .head:hover{transform:scale(1.08);z-index:2}
+    .head .label{position:absolute;left:50%;transform:translate(-50%, 6px);bottom:6px;background:rgba(0,0,0,0.7);color:#fff;padding:4px 8px;border-radius:999px;font-size:11px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .12s ease, transform .12s ease}
+    .head:hover .label{opacity:1;transform:translate(-50%, -6px)}
+    .rules {background:var(--card);border-radius:8px;padding:10px;color:var(--muted);font-size:13px;line-height:1.35}
     .right{display:flex;align-items:flex-start}
-    .slider{
-      position:relative;
-      overflow:hidden;
-      border-radius:6px;
-      flex:1;
-      height:calc(100vh - 200px);
-      max-height:760px;
-      background:transparent; /* remove black backdrop */
-    }
-    .track{
-      display:flex;
-      flex-direction:column;
-      transition:transform 450ms cubic-bezier(.22,.9,.26,1);
-      height:100%;
-    }
+    .slider{position:relative;overflow:hidden;border-radius:6px;flex:1;height:calc(100vh - 200px);max-height:760px;background:transparent}
+    .track{display:flex;flex-direction:column;transition:transform 450ms cubic-bezier(.22,.9,.26,1);height:100%}
     .slide{min-height:100%;flex-shrink:0;width:100%;display:block}
-    /* prevent cropping and align images to the top; no dark background */
-    .slide img{
-      width:100%;
-      height:100%;
-      object-fit:contain;
-      object-position:top center; /* keep screenshots aligned to top */
-      display:block;
-      background:transparent; /* removed dark backdrop */
-    }
-
+    .slide img{width:100%;height:100%;object-fit:contain;object-position:top center;display:block;background:transparent}
     .controls{position:absolute;left:8px;right:8px;top:8px;display:flex;justify-content:flex-end;gap:6px;pointer-events:none}
     .controls button{pointer-events:auto;background:rgba(0,0,0,0.28);border:0;color:#fff;padding:6px 8px;border-radius:4px;cursor:pointer;font-size:14px}
     .dots{display:flex;flex-direction:column;gap:8px;position:absolute;right:8px;top:50%;transform:translateY(-50%)}
     .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.12);cursor:pointer}
     .dot.active{background:var(--accent)}
-
     footer{margin-top:auto;color:#b5b5b5;font-size:13px}
-
-    @media (max-width:900px){
-      .layout{grid-template-columns:1fr;gap:12px}
-      .slider{height:260px;max-height:none}
-      .heads-grid{grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap:8px}
-      .head{width:48px;height:48px;border-radius:6px}
-    }
+    @media (max-width:900px){.layout{grid-template-columns:1fr;gap:12px}.slider{height:260px;max-height:none}.heads-grid{grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap:8px}.head{width:48px;height:48px;border-radius:6px}}
   </style>
 </head>
 <body>
@@ -205,14 +86,12 @@
 
         <a href="https://discord.spellbound.sh" target="_blank" rel="noopener" class="discord-btn">Join our Discord to apply</a>
 
-        <!-- left filler: player heads grid and rules box -->
-        <div class="left-filler" aria-hidden="false">
+        <div class="left-filler">
           <h3>Players</h3>
           <div class="heads-grid" id="headsGrid"></div>
 
           <h3 style="margin-top:8px">Rules</h3>
           <div class="rules" id="rulesBox">
-            <!-- paste your rules here or edit in HTML -->
             1. Be respectful.<br>
             2. No griefing.<br>
             3. No hacking or exploiting.<br>
@@ -244,7 +123,7 @@
   </div>
 
   <script>
-    // ---- slider logic (unchanged behavior) ----
+    /* slider logic (unchanged) */
     (function(){
       const track = document.getElementById('track');
       const slider = document.getElementById('slider');
@@ -254,12 +133,9 @@
       if(!track || !slider){ console.warn('Slider missing elements — aborting'); return; }
       const slides = Array.from(track.children);
       const total = slides.length;
-      let index = 0;
-      let autoplay = true;
-      let timer = null;
-      const interval = 3000;
+      let index = 0, autoplay = true, timer = null, interval = 3000;
       function goTo(i){ index = (i + total) % total; track.style.transform = `translateY(${-index * 100}%)`; updateDots(); }
-      function updateDots(){ if(!dotsWrap) return; dotsWrap.innerHTML = ''; for(let i=0;i<total;i++){ const d = document.createElement('div'); d.className = 'dot' + (i===index? ' active':''); d.addEventListener('click',()=>{goTo(i);resetTimer()}); dotsWrap.appendChild(d);} }
+      function updateDots(){ if(!dotsWrap) return; dotsWrap.innerHTML=''; for(let i=0;i<total;i++){ const d=document.createElement('div'); d.className='dot'+(i===index?' active':''); d.addEventListener('click',()=>{goTo(i);resetTimer()}); dotsWrap.appendChild(d);} }
       if(up) up.addEventListener('click',()=>{goTo(index-1);resetTimer()});
       if(down) down.addEventListener('click',()=>{goTo(index+1);resetTimer()});
       function startTimer(){ if(timer) clearInterval(timer); if(autoplay) timer = setInterval(()=>goTo(index+1),interval); }
@@ -268,42 +144,91 @@
       slider.addEventListener('mouseleave',()=>{autoplay=true; startTimer()});
       let touchStartY = 0;
       slider.addEventListener('touchstart', (e)=>{ if(e.touches && e.touches[0]) touchStartY = e.touches[0].clientY; autoplay=false; if(timer) clearInterval(timer)} , {passive:true});
-      slider.addEventListener('touchend', (e)=>{ const touchEndY = (e.changedTouches && e.changedTouches[0])? e.changedTouches[0].clientY : 0; const delta = touchStartY - touchEndY; if(Math.abs(delta)>30){ if(delta>0) goTo(index+1); else goTo(index-1);} autoplay=true; startTimer(); }, {passive:true});
-      updateDots();
-      goTo(0);
-      startTimer();
+      slider.addEventListener('touchend', (e)=>{ const touchEndY=(e.changedTouches&&e.changedTouches[0])?e.changedTouches[0].clientY:0; const delta=touchStartY-touchEndY; if(Math.abs(delta)>30){ if(delta>0) goTo(index+1); else goTo(index-1);} autoplay=true; startTimer(); }, {passive:true});
+      updateDots(); goTo(0); startTimer();
       window.addEventListener('resize', ()=>{ document.querySelector('.slider').style.height = window.innerWidth < 900 ? '260px' : `calc(100vh - 200px)`; });
     })();
 
-    // ---- player heads grid population using crafatar renders ----
-    (function(){
-      const players = [
+    /* usernames list */
+    const players = [
 "8oii","_pengwing","Brandonzx3","Comrade_2099","coxaflappin","Dank_dan","DiamondRoseToy",
 "DK60","el_djentleman","ElliePadd13","EyesOfAWolf","fransam","Gabrielh7038123","glasscr0ss",
 "HyperEh","Hypotemabus","imtoolazytoo","juniper_zero","KayPtz","Link0765","lokm08","LolBoomSheep",
 "lostcause1","lpwo","Lukinftw","madeline0706","malay_sia","Megamon","mostlightgreen",
 "MrCookie894247","Recycled_Scraps","SirSillee","SpadeBerserker","sulphuricIris333","Swiftace630",
 "tamolny","TerroristAndalu","Therm0o","TheTaco2k","TrueFoxtrot","Unicornspice42","unknownharlequin","xDuds"
-      ];
+    ];
 
+    /**
+     * Helper: insert dashes into Mojang style UUID (32 hex chars -> 8-4-4-4-12)
+     */
+    function dashUUID(raw){
+      if(!raw) return raw;
+      if(raw.includes('-')) return raw;
+      return raw.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/,'$1-$2-$3-$4-$5');
+    }
+
+    /**
+     * Resolve username -> uuid via Mojang, fallback to null on not found or error.
+     * Returns the raw uuid string (no dashes) or null.
+     */
+    async function fetchUUIDForName(name){
+      const url = `https://api.mojang.com/users/profiles/minecraft/${encodeURIComponent(name)}`;
+      try{
+        const res = await fetch(url, {cache: 'no-store'});
+        if(res.status === 200){
+          const j = await res.json();
+          // Mojang `id` is a 32-char hex string (no dashes)
+          return j.id || null;
+        }
+        // 204 or 404 -> not found
+        return null;
+      }catch(err){
+        console.warn('Mojang lookup failed for', name, err);
+        return null;
+      }
+    }
+
+    /**
+     * Build crafatar render URL given a uuid (no-dash or dashed) and size
+     */
+    function crafatarHeadUrl(uuid, size=56){
+      if(!uuid) return null;
+      // crafatar accepts dashed or undashed UUID; use undashed raw id for safety
+      return `https://crafatar.com/renders/head/${uuid}?size=${size}&overlay=true`;
+    }
+
+    /**
+     * Fallback head URL (mc-heads) which resolves by username
+     */
+    function mcHeadsFallback(name, size=56){
+      // mc-heads returns a nice PNG for a username
+      return `https://mc-heads.net/head/${encodeURIComponent(name)}`;
+    }
+
+    /**
+     * Populate the grid. We create placeholders first (so layout is stable)
+     * then resolve UUIDs sequentially and update src when available.
+     */
+    (async function populateHeads(){
       const grid = document.getElementById('headsGrid');
       if(!grid) return;
+      grid.innerHTML = ''; // clear
 
-      players.forEach(name=>{
+      // create placeholders (preserve ordering)
+      const nodes = players.map(name=>{
         const wrapper = document.createElement('a');
         wrapper.className = 'head';
-        // open mc head render page on click
-        wrapper.href = `https://crafatar.com/renders/head/${encodeURIComponent(name)}`;
+        wrapper.href = `https://mc-heads.net/head/${encodeURIComponent(name)}`;
         wrapper.target = '_blank';
         wrapper.rel = 'noopener noreferrer';
         wrapper.setAttribute('aria-label', name);
 
         const img = document.createElement('img');
-        // crafatar render URL — crafatar prefers UUIDs but often accepts usernames; it returns a transparent PNG head.
-        // size=56 matches our CSS; overlay=true shows helmets/cloaks when present.
-        img.src = `https://crafatar.com/renders/head/${encodeURIComponent(name)}?size=56&overlay=true`;
         img.alt = name;
         img.loading = 'lazy';
+        // small inline transparent placeholder so layout reserves space
+        img.src = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 
         const label = document.createElement('div');
         label.className = 'label';
@@ -312,10 +237,31 @@
         wrapper.appendChild(img);
         wrapper.appendChild(label);
         grid.appendChild(wrapper);
+
+        return {name, wrapper, img};
       });
+
+      // Resolve each name sequentially (helps avoid hitting rate limits)
+      for(const item of nodes){
+        const {name, img} = item;
+        let uuid = null;
+        try{
+          uuid = await fetchUUIDForName(name);
+        }catch(e){
+          uuid = null;
+        }
+
+        if(uuid){
+          // use crafatar with uuid (undashed is fine)
+          img.src = crafatarHeadUrl(uuid, 56);
+        }else{
+          // fallback to mc-heads (resolves usernames)
+          img.src = mcHeadsFallback(name, 56);
+        }
+      }
     })();
 
-    // ---- year ----
+    /* year */
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
