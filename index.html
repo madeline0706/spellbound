@@ -1,36 +1,181 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Spellbound Minecraft</title>
-  <link rel="icon" type="image/png" href="creeper.png">
+  <link rel="icon" type="image/png" href="creeper.png" />
   <style>
-    :root{--bg:#2b2b2b;--muted:#cfcfcf;--accent:#9ecbff}
+    :root{
+      --bg:#2b2b2b;
+      --muted:#cfcfcf;
+      --accent:#9ecbff;
+      --card:#232323;
+    }
     html,body{height:100%;margin:0}
-    body{background:var(--bg);color:#eee;font-family:system-ui,Arial,sans-serif;display:flex;flex-direction:column;}
+    body{
+      background:var(--bg);
+      color:#eee;
+      font-family:system-ui,Arial,sans-serif;
+      display:flex;
+      flex-direction:column;
+      -webkit-font-smoothing:antialiased;
+    }
     a{color:var(--accent)}
-    .wrap{flex:1;display:flex;flex-direction:column;width:min(1200px,96vw);margin:0 auto;padding:40px 20px 24px;}
-    .layout{display:grid;grid-template-columns:minmax(220px,40%) 1fr;gap:18px;align-items:start;flex:1}
-    .left{padding-right:6px;display:flex;flex-direction:column}
-    .left-filler{flex:1} /* filler space under Discord button */
-    .right{display:flex;align-items:flex-start}
+    /* page frame */
+    .wrap{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      width:min(1200px,96vw);
+      margin:0 auto;
+      padding:40px 20px 24px; /* keep header/footer padding as requested */
+      box-sizing:border-box;
+      min-height:calc(100vh - 64px);
+    }
+
+    /* main two-column layout */
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(220px,40%) 1fr;
+      gap:18px;
+      align-items:start; /* align both columns to the top */
+      flex:1;
+    }
+
+    /* left column */
+    .left{
+      padding-right:6px;
+      display:flex;
+      flex-direction:column;
+    }
     h1{margin:0 0 14px;font-size:30px}
     p{margin:0 0 20px;color:var(--muted)}
     h2{margin:20px 0 12px;font-size:16px}
     ul{margin:8px 0 0 20px;color:var(--muted)}
-    footer{margin-top:auto;color:#b5b5b5;font-size:13px}
-    .slider{position:relative;overflow:hidden;border-radius:6px;flex:1;height:calc(100vh - 200px);max-height:760px}
-    .track{display:flex;flex-direction:column;transition:transform 450ms cubic-bezier(.22,.9,.26,1);height:100%}
+    .discord-btn{
+      display:inline-block;
+      margin-top:16px;
+      padding:10px 14px;
+      background:#5865F2;
+      color:#fff;
+      border-radius:6px;
+      text-decoration:none;
+      font-weight:600;
+    }
+
+    /* filler area under discord btn (contains player heads grid) */
+    .left-filler{
+      margin-top:16px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      /* allow the grid to scroll if it would overflow small screens */
+      max-height: calc(100vh - 220px);
+      overflow:auto;
+      padding-right:6px;
+    }
+    .left-filler h3{
+      margin:0;
+      font-size:14px;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    /* heads grid */
+    .heads-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+      gap:10px;
+      align-items:start;
+    }
+    .head{
+      width:56px;
+      height:56px;
+      border-radius:8px;
+      background:var(--card);
+      display:inline-block;
+      overflow:hidden;
+      position:relative;
+      cursor:pointer;
+      transition:transform .12s ease, box-shadow .12s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .head img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .head:hover{
+      transform:scale(1.08);
+      box-shadow:0 6px 18px rgba(0,0,0,0.6);
+      z-index:2;
+    }
+    .head .label{
+      position:absolute;
+      left:50%;
+      transform:translate(-50%, 6px);
+      bottom:6px;
+      background:rgba(0,0,0,0.7);
+      color:#fff;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:11px;
+      white-space:nowrap;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .12s ease, transform .12s ease;
+    }
+    .head:hover .label{
+      opacity:1;
+      transform:translate(-50%, -6px);
+    }
+
+    /* right column / slider */
+    .right{display:flex;align-items:flex-start}
+    .slider{
+      position:relative;
+      overflow:hidden;
+      border-radius:6px;
+      flex:1;
+      /* keep the previous responsive height calculation so it looks like before */
+      height:calc(100vh - 200px);
+      max-height:760px;
+    }
+    .track{
+      display:flex;
+      flex-direction:column;
+      transition:transform 450ms cubic-bezier(.22,.9,.26,1);
+      height:100%;
+    }
     .slide{min-height:100%;flex-shrink:0;width:100%;display:block}
-    .slide img{width:100%;height:100%;object-fit:contain;display:block} /* prevent cropping */
+    /* prevent cropping and align images to the top */
+    .slide img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      object-position:top center; /* align the image to the top so it appears closer to the top */
+      display:block;
+      background:#111; /* small backdrop if image has edges */
+    }
+
     .controls{position:absolute;left:8px;right:8px;top:8px;display:flex;justify-content:flex-end;gap:6px;pointer-events:none}
     .controls button{pointer-events:auto;background:rgba(0,0,0,0.28);border:0;color:#fff;padding:6px 8px;border-radius:4px;cursor:pointer;font-size:14px}
     .dots{display:flex;flex-direction:column;gap:8px;position:absolute;right:8px;top:50%;transform:translateY(-50%)}
     .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.12);cursor:pointer}
     .dot.active{background:var(--accent)}
-    @media (max-width:900px){.layout{grid-template-columns:1fr;gap:12px}.slider{height:260px;max-height:none}}
-    .discord-btn{display:inline-block;margin-top:16px;padding:10px 14px;background:#5865F2;color:#fff;border-radius:6px;text-decoration:none;font-weight:600}
+
+    footer{margin-top:auto;color:#b5b5b5;font-size:13px}
+
+    @media (max-width:900px){
+      .layout{grid-template-columns:1fr;gap:12px}
+      .slider{height:260px;max-height:none}
+      .heads-grid{grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap:8px}
+      .head{width:48px;height:48px;border-radius:6px}
+    }
   </style>
 </head>
 <body>
@@ -46,11 +191,20 @@
           <li>Whitelist enabled</li>
           <li>Latest Minecraft version</li>
           <li>Discord chat integration</li>
-          <li>Creative & Event server</li>          
+          <li>Creative & Event server</li>
         </ul>
+
         <a href="https://discord.spellbound.sh" target="_blank" rel="noopener" class="discord-btn">Join our Discord to apply</a>
-        <div class="left-filler"></div>
+
+        <!-- left filler: player heads grid -->
+        <div class="left-filler" aria-hidden="false">
+          <h3>Players</h3>
+          <div class="heads-grid" id="headsGrid">
+            <!-- JS will populate this -->
+          </div>
+        </div>
       </div>
+
       <div class="right">
         <div class="slider" id="slider" aria-roledescription="carousel">
           <div class="track" id="track">
@@ -58,8 +212,9 @@
             <div class="slide"><img src="https://i.ibb.co/Q3fXxjtP/scrn5.png" alt="Look at all those chickens..." loading="lazy"></div>
             <div class="slide"><img src="https://i.ibb.co/LX1s0GDz/scrn3.png" alt="Oh..." loading="lazy"></div>
             <div class="slide"><img src="https://i.ibb.co/4wsMjPrq/scrn2.png" alt="Who wants to play Pong?" loading="lazy"></div>
-            <div class="slide"><img src="https://i.ibb.co/Q3dqSSxj/scrn1.png" alt="All hail..." loading="lazy"></div>                        
+            <div class="slide"><img src="https://i.ibb.co/Q3dqSSxj/scrn1.png" alt="All hail..." loading="lazy"></div>
           </div>
+
           <div class="controls">
             <button id="up" aria-label="Previous">˄</button>
             <button id="down" aria-label="Next">˅</button>
@@ -68,9 +223,12 @@
         </div>
       </div>
     </div>
+
     <footer>© <span id="year"></span> madelineopolis enterprizes LLSEE</footer>
   </div>
+
   <script>
+    // ---- slider logic (unchanged behavior) ----
     (function(){
       const track = document.getElementById('track');
       const slider = document.getElementById('slider');
@@ -100,7 +258,45 @@
       startTimer();
       window.addEventListener('resize', ()=>{ document.querySelector('.slider').style.height = window.innerWidth < 900 ? '260px' : `calc(100vh - 200px)`; });
     })();
-    document.getElementById('year').textContent=new Date().getFullYear();
+
+    // ---- player heads grid population ----
+    (function(){
+      const players = [
+"8oii","_pengwing","Brandonzx3","Comrade_2099","coxaflappin","Dank_dan","DiamondRoseToy",
+"DK60","el_djentleman","ElliePadd13","EyesOfAWolf","fransam","Gabrielh7038123","glasscr0ss",
+"HyperEh","Hypotemabus","imtoolazytoo","juniper_zero","KayPtz","Link0765","lokm08","LolBoomSheep",
+"lostcause1","lpwo","Lukinftw","madeline0706","malay_sia","Megamon","mostlightgreen",
+"MrCookie894247","Recycled_Scraps","SirSillee","SpadeBerserker","sulphuricIris333","Swiftace630",
+"tamolny","TerroristAndalu","Therm0o","TheTaco2k","TrueFoxtrot","Unicornspice42","unknownharlequin","xDuds"
+      ];
+
+      const grid = document.getElementById('headsGrid');
+      if(!grid) return;
+
+      // mc-heads base: use the username directly (mc-heads.net/head/username)
+      players.forEach(name=>{
+        const wrapper = document.createElement('a');
+        wrapper.className = 'head';
+        wrapper.href = `https://mc-heads.net/head/${encodeURIComponent(name)}`;
+        wrapper.target = '_blank';
+        wrapper.rel = 'noopener noreferrer';
+        wrapper.setAttribute('aria-label', name);
+
+        const img = document.createElement('img');
+        img.src = `https://mc-heads.net/head/${encodeURIComponent(name)}`; // mc-heads returns the head image
+        img.alt = name;
+
+        const label = document.createElement('div');
+        label.className = 'label';
+        label.textContent = name;
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(label);
+        grid.appendChild(wrapper);
+      });
+    })();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
