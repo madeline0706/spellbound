@@ -50,17 +50,8 @@
     .head img{width:100%;height:100%;object-fit:cover;display:block;background:transparent}
     .head:hover{transform:scale(1.08);z-index:2}
     .rules-wrap{margin-top:12px}
-    .rules-box{background:var(--card);border-radius:8px;padding:10px;color:var(--muted);font-size:13px;line-height:1.35}
-    .rules-list{list-style:none;margin:8px 0 0 0;padding:0;color:var(--muted)}
-    .rules-list li{margin:6px 0;padding-left:18px;position:relative}
-    .rules-list li::before{
-      content: "⋄";
-      position:absolute;
-      left:0;
-      top:0;
-      color:var(--muted);
-      line-height:1;
-    }
+    .rules-box{background:var(--card);border-radius:8px;padding:10px;color:var(--muted);font-size:13px;line-height:1.35;margin-top:6px;margin-left:8px}
+    .rules-list{margin:8px 0 0 20px;color:var(--muted)}
     .rules-more{margin-top:10px;color:var(--muted);font-size:13px}
     .right{display:flex;flex-direction:column;align-items:flex-start}
 
@@ -104,6 +95,7 @@
       .layout{grid-template-columns:1fr;gap:12px}
       .heads-grid{grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap:8px}
       .head{width:48px;height:48px;border-radius:6px}
+      .rules-box{margin-left:4px}
     }
   </style>
 </head>
