@@ -19,7 +19,6 @@
       font-family:system-ui,Arial,sans-serif;
       display:flex;
       flex-direction:column;
-      -webkit-font-smoothing:antialiased;
     }
     a{color:var(--accent)}
     .wrap{
@@ -47,45 +46,59 @@
     .discord-btn{display:inline-block;margin-top:16px;padding:10px 14px;background:#5865F2;color:#fff;border-radius:6px;text-decoration:none;font-weight:600}
     .heads-wrap{margin-top:16px;max-height:calc(100vh - 220px);overflow:auto;padding-right:6px}
     .heads-grid{display:grid;grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));gap:10px;align-items:start}
-    .head{width:56px;height:56px;border-radius:8px;background:transparent;display:inline-block;overflow:hidden;position:relative;cursor:pointer;transition:transform .12s ease;display:flex;align-items:center;justify-content:center}
+    .head{width:56px;height:56px;border-radius:8px;background:transparent;overflow:hidden;position:relative;cursor:pointer;transition:transform .12s ease;display:flex;align-items:center;justify-content:center}
     .head img{width:100%;height:100%;object-fit:cover;display:block;background:transparent}
     .head:hover{transform:scale(1.08);z-index:2}
     .rules{background:var(--card);border-radius:8px;padding:10px;color:var(--muted);font-size:13px;line-height:1.35;margin-top:12px}
     .right{display:flex;flex-direction:column;align-items:flex-start}
 
-    /* slider */
+    /* slider: single visible slide, maintain image aspect ratio */
     .slider{
       position:relative;
-      overflow:hidden;
+      overflow:visible;
       border-radius:6px;
-      flex:1;
+      width:100%;
+      transition:height 260ms ease;
       background:transparent;
     }
-    .track{
-      display:block; /* we'll manually size/position slides with JS */
-      transition:transform 450ms cubic-bezier(.22,.9,.26,1);
-      will-change:transform;
-    }
-
-    /* each slide will be sized by JS to exact pixel height */
+    .track{position:relative}
     .slide{
-      width:100%;
-      display:block;
-      box-sizing:border-box;
+      position:absolute;
+      inset:0; /* top/right/bottom/left = 0 */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .42s ease;
     }
-
+    .slide.active{
+      opacity:1;
+      pointer-events:auto;
+      z-index:1;
+      position:relative; /* take part in flow for accessibility if needed */
+    }
     .slide img{
-      width:100%;
-      height:100%;
-      object-fit:contain;
-      object-position:top center;
       display:block;
+      max-width:100%;
+      height:auto; /* preserve original aspect ratio */
+      object-fit:contain;
+      object-position:center top;
       background:transparent;
     }
-
-    .controls{position:absolute;left:8px;right:8px;top:8px;display:flex;justify-content:flex-end;gap:6px;pointer-events:none}
+    .controls{position:absolute;right:8px;top:8px;display:flex;gap:6px;pointer-events:none}
     .controls button{pointer-events:auto;background:rgba(0,0,0,0.28);border:0;color:#fff;padding:6px 8px;border-radius:4px;cursor:pointer;font-size:14px}
-    .dots{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;gap:8px;pointer-events:auto}
+    .dots{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      top:50%;
+      translate: 0 -50%;
+      display:flex;
+      gap:8px;
+      pointer-events:auto;
+      z-index:5;
+    }
     .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.12);cursor:pointer;transition:background .12s ease, transform .12s ease}
     .dot.active{background:var(--accent);transform:scale(1.2)}
     footer{margin-top:auto;color:#b5b5b5;font-size:13px}
@@ -94,7 +107,7 @@
       .layout{grid-template-columns:1fr;gap:12px}
       .heads-grid{grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap:8px}
       .head{width:48px;height:48px;border-radius:6px}
-      .dots{bottom:10px}
+      .dots{top:50%}
     }
   </style>
 </head>
@@ -135,6 +148,7 @@
             <button id="up" aria-label="Previous">˄</button>
             <button id="down" aria-label="Next">˅</button>
           </div>
+
           <div class="dots" id="dots" aria-hidden="false"></div>
         </div>
 
@@ -154,7 +168,7 @@
     (function(){
       const slider = document.getElementById('slider');
       const track = document.getElementById('track');
-      const slides = Array.from(track.children);
+      const slides = Array.from(track.querySelectorAll('.slide'));
       const dotsWrap = document.getElementById('dots');
       const up = document.getElementById('up');
       const down = document.getElementById('down');
@@ -164,34 +178,7 @@
       let timer = null;
       const interval = 3000;
 
-      function getSliderHeight(){
-        if(window.innerWidth < 900) return 260;
-        // match previous calc(100vh - 200px)
-        return Math.max(260, window.innerHeight - 200);
-      }
-
-      function sizeSlides(){
-        const h = getSliderHeight();
-        slider.style.height = h + 'px';
-        // set each slide to the exact pixel height
-        slides.forEach(s => {
-          s.style.height = h + 'px';
-        });
-        // set track height to total * h so slides are stacked
-        track.style.height = (total * h) + 'px';
-        // reposition to current index (use pixel translate)
-        track.style.transform = `translateY(${-index * h}px)`;
-      }
-
-      function goTo(i){
-        index = (i + total) % total;
-        const h = getSliderHeight();
-        track.style.transform = `translateY(${-index * h}px)`;
-        updateDots();
-      }
-
-      function updateDots(){
-        if(!dotsWrap) return;
+      function createDots(){
         dotsWrap.innerHTML = '';
         for(let i=0;i<total;i++){
           const d = document.createElement('div');
@@ -201,29 +188,73 @@
         }
       }
 
-      if(up) up.addEventListener('click', ()=>{ goTo(index-1); resetTimer(); });
-      if(down) down.addEventListener('click', ()=>{ goTo(index+1); resetTimer(); });
+      function setActive(i){
+        slides.forEach((s, idx)=>{
+          s.classList.toggle('active', idx === i);
+        });
+        // update dots active state
+        Array.from(dotsWrap.children).forEach((d, idx)=> d.classList.toggle('active', idx === i));
+      }
+
+      function computeImageDisplayHeight(img){
+        const containerWidth = slider.clientWidth;
+        // if image hasn't loaded naturalWidth is 0 — in that case rely on current rendered height
+        const nw = img.naturalWidth || img.width;
+        const nh = img.naturalHeight || img.height;
+        if(!nw || !nh) return img.clientHeight || 300;
+        return Math.round(nh * (containerWidth / nw));
+      }
+
+      async function setSliderHeightForIndex(i){
+        const img = slides[i].querySelector('img');
+        // make sure image is loaded
+        if(!img.complete || img.naturalWidth === 0){
+          await new Promise(resolve => {
+            img.addEventListener('load', resolve, {once:true});
+            // in case load already done but naturalWidth missing, wait a tick
+            setTimeout(resolve, 600);
+          });
+        }
+        const h = computeImageDisplayHeight(img);
+        slider.style.height = h + 'px';
+      }
+
+      async function goTo(i){
+        index = (i + total) % total;
+        await setSliderHeightForIndex(index);
+        setActive(index);
+      }
 
       function startTimer(){ if(timer) clearInterval(timer); if(autoplay) timer = setInterval(()=> goTo(index+1), interval); }
       function resetTimer(){ startTimer(); }
 
-      slider.addEventListener('mouseenter', ()=>{ autoplay = false; if(timer) clearInterval(timer); });
-      slider.addEventListener('mouseleave', ()=>{ autoplay = true; startTimer(); });
+      // controls
+      if(up) up.addEventListener('click', ()=>{ goTo(index-1); resetTimer(); });
+      if(down) down.addEventListener('click', ()=>{ goTo(index+1); resetTimer(); });
 
-      slider.addEventListener('touchstart', (e)=>{ if(e.touches && e.touches[0]) touchStartY = e.touches[0].clientY; autoplay=false; if(timer) clearInterval(timer); } , {passive:true});
-      let touchStartY = 0;
-      slider.addEventListener('touchend', (e)=>{ const touchEndY = (e.changedTouches && e.changedTouches[0])? e.changedTouches[0].clientY : 0; const delta = touchStartY - touchEndY; if(Math.abs(delta)>30){ if(delta>0) goTo(index+1); else goTo(index-1);} autoplay=true; startTimer(); }, {passive:true});
+      // touch swipe support (vertical swipe)
+      let touchStartY = null;
+      slider.addEventListener('touchstart', (e)=>{ if(e.touches && e.touches[0]) touchStartY = e.touches[0].clientY; autoplay=false; if(timer) clearInterval(timer); }, {passive:true});
+      slider.addEventListener('touchend', (e)=>{ const endY = (e.changedTouches && e.changedTouches[0])? e.changedTouches[0].clientY : 0; if(touchStartY!=null){ const d = touchStartY - endY; if(Math.abs(d) > 30){ if(d > 0) goTo(index+1); else goTo(index-1); } } touchStartY = null; autoplay=true; startTimer(); }, {passive:true});
 
-      window.addEventListener('resize', ()=>{ sizeSlides(); });
+      // when window resizes, recompute height for current image
+      let resizeTimer = null;
+      window.addEventListener('resize', ()=>{ if(resizeTimer) clearTimeout(resizeTimer); resizeTimer = setTimeout(()=> setSliderHeightForIndex(index), 120); });
 
-      // init
-      sizeSlides();
-      updateDots();
-      goTo(0);
-      startTimer();
+      // initialization
+      createDots();
+      // ensure first image height is applied, then activate slide
+      (async ()=>{
+        // preload images (start load and wait for first to be load-ready)
+        const imgs = slides.map(s=>s.querySelector('img'));
+        // if any images already loaded won't block; we wait only for the current image to finish (or timeout)
+        await setSliderHeightForIndex(0);
+        setActive(0);
+        startTimer();
+      })();
     })();
 
-    // heads + UUID resolving (unchanged)
+    // heads + username -> UUID -> crafatar (same approach as before)
     const players = [
 "8oii","_pengwing","Brandonzx3","Comrade_2099","coxaflappin","Dank_dan","DiamondRoseToy",
 "DK60","el_djentleman","ElliePadd13","EyesOfAWolf","fransam","Gabrielh7038123","glasscr0ss",
