@@ -52,7 +52,6 @@
     .rules{background:var(--card);border-radius:8px;padding:10px;color:var(--muted);font-size:13px;line-height:1.35;margin-top:12px}
     .right{display:flex;flex-direction:column;align-items:flex-start}
 
-    /* slider: single visible slide, maintain image aspect ratio */
     .slider{
       position:relative;
       overflow:visible;
@@ -64,7 +63,7 @@
     .track{position:relative}
     .slide{
       position:absolute;
-      inset:0; /* top/right/bottom/left = 0 */
+      inset:0;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -76,38 +75,23 @@
       opacity:1;
       pointer-events:auto;
       z-index:1;
-      position:relative; /* take part in flow for accessibility if needed */
+      position:relative;
     }
     .slide img{
       display:block;
       max-width:100%;
-      height:auto; /* preserve original aspect ratio */
+      height:auto;
       object-fit:contain;
       object-position:center top;
       background:transparent;
     }
-    .controls{position:absolute;right:8px;top:8px;display:flex;gap:6px;pointer-events:none}
-    .controls button{pointer-events:auto;background:rgba(0,0,0,0.28);border:0;color:#fff;padding:6px 8px;border-radius:4px;cursor:pointer;font-size:14px}
-    .dots{
-      position:absolute;
-      left:50%;
-      transform:translateX(-50%);
-      top:50%;
-      translate: 0 -50%;
-      display:flex;
-      gap:8px;
-      pointer-events:auto;
-      z-index:5;
-    }
-    .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.12);cursor:pointer;transition:background .12s ease, transform .12s ease}
-    .dot.active{background:var(--accent);transform:scale(1.2)}
+
     footer{margin-top:auto;color:#b5b5b5;font-size:13px}
 
     @media (max-width:900px){
       .layout{grid-template-columns:1fr;gap:12px}
       .heads-grid{grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap:8px}
       .head{width:48px;height:48px;border-radius:6px}
-      .dots{top:50%}
     }
   </style>
 </head>
@@ -143,13 +127,6 @@
             <div class="slide"><img src="https://i.ibb.co/4wsMjPrq/scrn2.png" alt="Who wants to play Pong?" loading="lazy"></div>
             <div class="slide"><img src="https://i.ibb.co/Q3dqSSxj/scrn1.png" alt="All hail..." loading="lazy"></div>
           </div>
-
-          <div class="controls">
-            <button id="up" aria-label="Previous">˄</button>
-            <button id="down" aria-label="Next">˅</button>
-          </div>
-
-          <div class="dots" id="dots" aria-hidden="false"></div>
         </div>
 
         <div class="rules" id="rulesBox">
@@ -169,36 +146,14 @@
       const slider = document.getElementById('slider');
       const track = document.getElementById('track');
       const slides = Array.from(track.querySelectorAll('.slide'));
-      const dotsWrap = document.getElementById('dots');
-      const up = document.getElementById('up');
-      const down = document.getElementById('down');
       const total = slides.length;
       let index = 0;
       let autoplay = true;
       let timer = null;
-      const interval = 3000;
-
-      function createDots(){
-        dotsWrap.innerHTML = '';
-        for(let i=0;i<total;i++){
-          const d = document.createElement('div');
-          d.className = 'dot' + (i===index ? ' active' : '');
-          d.addEventListener('click', ()=>{ goTo(i); resetTimer(); });
-          dotsWrap.appendChild(d);
-        }
-      }
-
-      function setActive(i){
-        slides.forEach((s, idx)=>{
-          s.classList.toggle('active', idx === i);
-        });
-        // update dots active state
-        Array.from(dotsWrap.children).forEach((d, idx)=> d.classList.toggle('active', idx === i));
-      }
+      const interval = 6000; // doubled speed: 6000ms per image
 
       function computeImageDisplayHeight(img){
         const containerWidth = slider.clientWidth;
-        // if image hasn't loaded naturalWidth is 0 — in that case rely on current rendered height
         const nw = img.naturalWidth || img.width;
         const nh = img.naturalHeight || img.height;
         if(!nw || !nh) return img.clientHeight || 300;
@@ -207,11 +162,9 @@
 
       async function setSliderHeightForIndex(i){
         const img = slides[i].querySelector('img');
-        // make sure image is loaded
         if(!img.complete || img.naturalWidth === 0){
           await new Promise(resolve => {
             img.addEventListener('load', resolve, {once:true});
-            // in case load already done but naturalWidth missing, wait a tick
             setTimeout(resolve, 600);
           });
         }
@@ -219,42 +172,31 @@
         slider.style.height = h + 'px';
       }
 
-      async function goTo(i){
+      async function setActive(i){
         index = (i + total) % total;
         await setSliderHeightForIndex(index);
-        setActive(index);
+        slides.forEach((s, idx)=>{
+          s.classList.toggle('active', idx === index);
+        });
       }
 
-      function startTimer(){ if(timer) clearInterval(timer); if(autoplay) timer = setInterval(()=> goTo(index+1), interval); }
+      function startTimer(){ if(timer) clearInterval(timer); if(autoplay) timer = setInterval(()=> setActive(index+1), interval); }
       function resetTimer(){ startTimer(); }
 
-      // controls
-      if(up) up.addEventListener('click', ()=>{ goTo(index-1); resetTimer(); });
-      if(down) down.addEventListener('click', ()=>{ goTo(index+1); resetTimer(); });
-
-      // touch swipe support (vertical swipe)
       let touchStartY = null;
       slider.addEventListener('touchstart', (e)=>{ if(e.touches && e.touches[0]) touchStartY = e.touches[0].clientY; autoplay=false; if(timer) clearInterval(timer); }, {passive:true});
-      slider.addEventListener('touchend', (e)=>{ const endY = (e.changedTouches && e.changedTouches[0])? e.changedTouches[0].clientY : 0; if(touchStartY!=null){ const d = touchStartY - endY; if(Math.abs(d) > 30){ if(d > 0) goTo(index+1); else goTo(index-1); } } touchStartY = null; autoplay=true; startTimer(); }, {passive:true});
+      slider.addEventListener('touchend', (e)=>{ const endY = (e.changedTouches && e.changedTouches[0])? e.changedTouches[0].clientY : 0; if(touchStartY!=null){ const d = touchStartY - endY; if(Math.abs(d) > 30){ if(d > 0) setActive(index+1); else setActive(index-1); } } touchStartY = null; autoplay=true; startTimer(); }, {passive:true});
 
-      // when window resizes, recompute height for current image
       let resizeTimer = null;
       window.addEventListener('resize', ()=>{ if(resizeTimer) clearTimeout(resizeTimer); resizeTimer = setTimeout(()=> setSliderHeightForIndex(index), 120); });
 
-      // initialization
-      createDots();
-      // ensure first image height is applied, then activate slide
       (async ()=>{
-        // preload images (start load and wait for first to be load-ready)
-        const imgs = slides.map(s=>s.querySelector('img'));
-        // if any images already loaded won't block; we wait only for the current image to finish (or timeout)
         await setSliderHeightForIndex(0);
-        setActive(0);
+        slides.forEach((s, idx)=> s.classList.toggle('active', idx === 0));
         startTimer();
       })();
     })();
 
-    // heads + username -> UUID -> crafatar (same approach as before)
     const players = [
 "8oii","_pengwing","Brandonzx3","Comrade_2099","coxaflappin","Dank_dan","DiamondRoseToy",
 "DK60","el_djentleman","ElliePadd13","EyesOfAWolf","fransam","Gabrielh7038123","glasscr0ss",
