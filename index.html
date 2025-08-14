@@ -10,19 +10,20 @@
     html,body{height:100%;margin:0}
     body{background:var(--bg);color:#eee;font-family:system-ui,Arial,sans-serif;display:flex;flex-direction:column;}
     a{color:var(--accent)}
-    .wrap{flex:1;display:flex;flex-direction:column;width:min(1200px,96vw);margin:0 auto;padding:40px 20px 24px;}
-    .layout{display:grid;grid-template-columns:minmax(220px,40%) 1fr;gap:18px;align-items:start;flex:1}
-    .left{padding-right:6px}
-    .right{display:flex;align-items:flex-start}
+    .wrap{flex:1;display:flex;flex-direction:column;width:min(1200px,96vw);margin:0 auto;padding:40px 20px 24px;min-height:calc(100vh - 64px);}
+    .layout{display:grid;grid-template-columns:minmax(220px,40%) 1fr;gap:18px;align-items:stretch;flex:1}
+    .left{padding-right:6px;display:flex;flex-direction:column}
+    .left-filler{flex:1} /* filler space under Discord button */
+    .right{display:flex;align-items:flex-start;flex-direction:column}
     h1{margin:0 0 14px;font-size:30px}
     p{margin:0 0 20px;color:var(--muted)}
     h2{margin:20px 0 12px;font-size:16px}
     ul{margin:8px 0 0 20px;color:var(--muted)}
     footer{margin-top:auto;color:#b5b5b5;font-size:13px}
-    .slider{position:relative;overflow:hidden;border-radius:6px;flex:1;height:calc(100vh - 200px);max-height:760px}
+    .slider{position:relative;overflow:hidden;border-radius:6px;flex:1 1 auto;height:auto;min-height:400px}
     .track{display:flex;flex-direction:column;transition:transform 450ms cubic-bezier(.22,.9,.26,1);height:100%}
     .slide{min-height:100%;flex-shrink:0;width:100%;display:block}
-    .slide img{width:100%;height:100%;object-fit:cover;display:block}
+    .slide img{width:100%;height:100%;object-fit:contain;display:block}
     .controls{position:absolute;left:8px;right:8px;top:8px;display:flex;justify-content:flex-end;gap:6px;pointer-events:none}
     .controls button{pointer-events:auto;background:rgba(0,0,0,0.28);border:0;color:#fff;padding:6px 8px;border-radius:4px;cursor:pointer;font-size:14px}
     .dots{display:flex;flex-direction:column;gap:8px;position:absolute;right:8px;top:50%;transform:translateY(-50%)}
@@ -48,6 +49,7 @@
           <li>Creative & Event server</li>          
         </ul>
         <a href="https://discord.spellbound.sh" target="_blank" rel="noopener" class="discord-btn">Join our Discord to apply</a>
+        <div class="left-filler"></div>
       </div>
       <div class="right">
         <div class="slider" id="slider" aria-roledescription="carousel">
