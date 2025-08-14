@@ -59,23 +59,19 @@
       overflow:hidden;
       border-radius:6px;
       flex:1;
-      height:calc(100vh - 200px);
-      max-height:760px;
       background:transparent;
     }
     .track{
-      display:flex;
-      flex-direction:column;
+      display:block; /* we'll manually size/position slides with JS */
       transition:transform 450ms cubic-bezier(.22,.9,.26,1);
-      height:100%;
+      will-change:transform;
     }
 
-    /* critical fix: make each slide exactly the slider height */
+    /* each slide will be sized by JS to exact pixel height */
     .slide{
-      flex: 0 0 100%;
       width:100%;
-      height:100%;
       display:block;
+      box-sizing:border-box;
     }
 
     .slide img{
@@ -96,7 +92,6 @@
 
     @media (max-width:900px){
       .layout{grid-template-columns:1fr;gap:12px}
-      .slider{height:260px;max-height:none}
       .heads-grid{grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap:8px}
       .head{width:48px;height:48px;border-radius:6px}
       .dots{bottom:10px}
@@ -157,48 +152,78 @@
 
   <script>
     (function(){
-      const track = document.getElementById('track');
       const slider = document.getElementById('slider');
+      const track = document.getElementById('track');
+      const slides = Array.from(track.children);
       const dotsWrap = document.getElementById('dots');
       const up = document.getElementById('up');
       const down = document.getElementById('down');
-      if(!track || !slider) return;
-      const slides = Array.from(track.children);
       const total = slides.length;
       let index = 0;
       let autoplay = true;
       let timer = null;
       const interval = 3000;
+
+      function getSliderHeight(){
+        if(window.innerWidth < 900) return 260;
+        // match previous calc(100vh - 200px)
+        return Math.max(260, window.innerHeight - 200);
+      }
+
+      function sizeSlides(){
+        const h = getSliderHeight();
+        slider.style.height = h + 'px';
+        // set each slide to the exact pixel height
+        slides.forEach(s => {
+          s.style.height = h + 'px';
+        });
+        // set track height to total * h so slides are stacked
+        track.style.height = (total * h) + 'px';
+        // reposition to current index (use pixel translate)
+        track.style.transform = `translateY(${-index * h}px)`;
+      }
+
       function goTo(i){
         index = (i + total) % total;
-        track.style.transform = `translateY(${-index * 100}%)`;
+        const h = getSliderHeight();
+        track.style.transform = `translateY(${-index * h}px)`;
         updateDots();
       }
+
       function updateDots(){
         if(!dotsWrap) return;
         dotsWrap.innerHTML = '';
         for(let i=0;i<total;i++){
           const d = document.createElement('div');
           d.className = 'dot' + (i===index ? ' active' : '');
-          d.addEventListener('click',()=>{ goTo(i); resetTimer(); });
+          d.addEventListener('click', ()=>{ goTo(i); resetTimer(); });
           dotsWrap.appendChild(d);
         }
       }
-      if(up) up.addEventListener('click',()=>{ goTo(index-1); resetTimer(); });
-      if(down) down.addEventListener('click',()=>{ goTo(index+1); resetTimer(); });
-      function startTimer(){ if(timer) clearInterval(timer); if(autoplay) timer = setInterval(()=>goTo(index+1),interval); }
+
+      if(up) up.addEventListener('click', ()=>{ goTo(index-1); resetTimer(); });
+      if(down) down.addEventListener('click', ()=>{ goTo(index+1); resetTimer(); });
+
+      function startTimer(){ if(timer) clearInterval(timer); if(autoplay) timer = setInterval(()=> goTo(index+1), interval); }
       function resetTimer(){ startTimer(); }
-      slider.addEventListener('mouseenter',()=>{ autoplay=false; if(timer) clearInterval(timer); });
-      slider.addEventListener('mouseleave',()=>{ autoplay=true; startTimer(); });
-      let touchStartY = 0;
+
+      slider.addEventListener('mouseenter', ()=>{ autoplay = false; if(timer) clearInterval(timer); });
+      slider.addEventListener('mouseleave', ()=>{ autoplay = true; startTimer(); });
+
       slider.addEventListener('touchstart', (e)=>{ if(e.touches && e.touches[0]) touchStartY = e.touches[0].clientY; autoplay=false; if(timer) clearInterval(timer); } , {passive:true});
-      slider.addEventListener('touchend', (e)=>{ const touchEndY = (e.changedTouches && e.changedTouches[0])? e.changedTouches[0].clientY : 0; const delta = touchStartY - touchEndY; if(Math.abs(delta)>30){ if(delta>0) goTo(index+1); else goTo(index-1); } autoplay=true; startTimer(); }, {passive:true});
+      let touchStartY = 0;
+      slider.addEventListener('touchend', (e)=>{ const touchEndY = (e.changedTouches && e.changedTouches[0])? e.changedTouches[0].clientY : 0; const delta = touchStartY - touchEndY; if(Math.abs(delta)>30){ if(delta>0) goTo(index+1); else goTo(index-1);} autoplay=true; startTimer(); }, {passive:true});
+
+      window.addEventListener('resize', ()=>{ sizeSlides(); });
+
+      // init
+      sizeSlides();
       updateDots();
       goTo(0);
       startTimer();
-      window.addEventListener('resize', ()=>{ document.querySelector('.slider').style.height = window.innerWidth < 900 ? '260px' : `calc(100vh - 200px)`; });
     })();
 
+    // heads + UUID resolving (unchanged)
     const players = [
 "8oii","_pengwing","Brandonzx3","Comrade_2099","coxaflappin","Dank_dan","DiamondRoseToy",
 "DK60","el_djentleman","ElliePadd13","EyesOfAWolf","fransam","Gabrielh7038123","glasscr0ss",
