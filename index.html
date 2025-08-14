@@ -33,27 +33,91 @@
     }
     .layout{
       display:grid;
-      grid-template-columns:minmax(220px,40%) 1fr;
-      gap:18px;
+      grid-template-columns:minmax(280px,40%) 1fr;
+      gap:24px;
       align-items:start;
       flex:1;
     }
-    .left{padding-right:6px;display:flex;flex-direction:column}
+    .left{
+      padding-right:8px;
+      display:flex;
+      flex-direction:column;
+      min-width:0; /* Prevents grid blowout */
+    }
     h1{margin:0 0 14px;font-size:30px}
     p{margin:0 0 20px;color:var(--muted)}
     h2{margin:20px 0 12px;font-size:16px}
     ul{margin:8px 0 0 20px;color:var(--muted)}
-    .discord-btn{display:inline-block;margin-top:16px;padding:10px 14px;background:#5865F2;color:#fff;border-radius:6px;text-decoration:none;font-weight:600}
-    .heads-wrap{margin-top:16px;max-height:calc(100vh - 220px);overflow:auto;padding-right:6px}
-    .heads-grid{display:grid;grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));gap:10px;align-items:start}
-    .head{width:56px;height:56px;border-radius:8px;background:transparent;overflow:hidden;position:relative;cursor:pointer;transition:transform .12s ease;display:flex;align-items:center;justify-content:center}
-    .head img{width:100%;height:100%;object-fit:cover;display:block;background:transparent}
-    .head:hover{transform:scale(1.08);z-index:2}
+    .discord-btn{
+      display:inline-block;
+      margin-top:16px;
+      padding:10px 14px;
+      background:#5865F2;
+      color:#fff;
+      border-radius:6px;
+      text-decoration:none;
+      font-weight:600;
+      width:fit-content;
+    }
+    .heads-wrap{
+      margin-top:16px;
+      max-height:calc(100vh - 320px);
+      overflow:auto;
+      padding-right:6px;
+      width:100%;
+      box-sizing:border-box;
+    }
+    .heads-grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+      gap:10px;
+      align-items:start;
+      width:100%;
+    }
+    .head{
+      width:56px;
+      height:56px;
+      border-radius:8px;
+      background:transparent;
+      overflow:hidden;
+      position:relative;
+      cursor:pointer;
+      transition:transform .12s ease;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      justify-self:center; /* Centers heads in their grid cells */
+    }
+    .head img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      background:transparent;
+    }
+    .head:hover{
+      transform:scale(1.08);
+      z-index:2;
+    }
     .rules-wrap{margin-top:12px}
-    .rules-box{background:var(--card);border-radius:8px;padding:10px;color:var(--muted);font-size:13px;line-height:1.35;margin-top:6px;margin-left:8px}
+    .rules-box{
+      background:var(--card);
+      border-radius:8px;
+      padding:10px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+      margin-top:6px;
+      margin-left:8px;
+    }
     .rules-list{margin:8px 0 0 20px;color:var(--muted)}
     .rules-more{margin-top:10px;color:var(--muted);font-size:13px}
-    .right{display:flex;flex-direction:column;align-items:flex-start}
+    .right{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      min-width:0; /* Prevents grid blowout */
+    }
 
     .slider{
       position:relative;
@@ -89,13 +153,47 @@
       background:transparent;
     }
 
-    footer{margin-top:auto;color:#b5b5b5;font-size:13px}
+    footer{
+      margin-top:auto;
+      color:#b5b5b5;
+      font-size:13px;
+      text-align:center;
+      padding-top:20px;
+    }
 
     @media (max-width:900px){
-      .layout{grid-template-columns:1fr;gap:12px}
-      .heads-grid{grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); gap:8px}
-      .head{width:48px;height:48px;border-radius:6px}
+      .layout{
+        grid-template-columns:1fr;
+        gap:20px;
+      }
+      .heads-grid{
+        grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); 
+        gap:8px;
+      }
+      .head{
+        width:48px;
+        height:48px;
+        border-radius:6px;
+      }
       .rules-box{margin-left:4px}
+      .heads-wrap{
+        max-height:300px;
+      }
+    }
+
+    /* Scrollbar styling for heads container */
+    .heads-wrap::-webkit-scrollbar {
+      width: 6px;
+    }
+    .heads-wrap::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    .heads-wrap::-webkit-scrollbar-thumb {
+      background: var(--card);
+      border-radius: 3px;
+    }
+    .heads-wrap::-webkit-scrollbar-thumb:hover {
+      background: #444;
     }
   </style>
 </head>
