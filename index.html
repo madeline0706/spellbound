@@ -418,6 +418,9 @@
 
     // Initialize everything when DOM is loaded
     document.addEventListener('DOMContentLoaded', () => {
+      console.log('DOM loaded, initializing...');
+      console.log('Whitelist has', whitelistedPlayers.length, 'players');
+      console.log('First few players:', whitelistedPlayers.slice(0, 3));
       loadPlayerHeads();
       initSlider();
       document.getElementById('year').textContent = new Date().getFullYear();
