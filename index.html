@@ -23,14 +23,28 @@
     }
     a{color:var(--accent)}
 
-    /* Header Image */
+    /* Header container with sidebars */
+    .header-container {
+      display: flex;
+    }
+    .header-sidebar {
+      flex: 1;
+      background: var(--sidebar);
+    }
+    .header-content {
+      flex: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 20px 0;
+      box-sizing: border-box;
+    }
     .header-image {
       display: block;
       max-width: 1000px;   
       width: 90%;          
-      margin: 20px auto;   
+      margin: 0 auto;   
       border-radius: 12px; 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3); /* optional subtle shadow */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
 
     /* Page wrap with sidebars */
@@ -194,6 +208,11 @@
     }
 
     @media (max-width:900px){
+      .header-sidebar{display:none;}
+      .header-content{
+        flex:1;
+        padding:20px;
+      }
       .layout{
         grid-template-columns:1fr;
         gap:20px;
@@ -230,8 +249,14 @@
   </style>
 </head>
 <body>
-  <!-- Header Image -->
-  <img src="headerimage.png" alt="Spellbound Header" class="header-image">
+  <!-- Header with matching sidebar layout -->
+  <div class="header-container">
+    <div class="header-sidebar"></div>
+    <div class="header-content">
+      <img src="headerimage.png" alt="Spellbound Header" class="header-image">
+    </div>
+    <div class="header-sidebar"></div>
+  </div>
 
   <div class="page">
     <div class="sidebar"></div>
@@ -278,10 +303,10 @@
                 <li>No X-ray</li>
                 <li>No griefing</li>
                 <li>No stealing</li>
-                <li>No hacking¹</li>
-                <li>No game-breaking duplication²</li>
-                <li>Do not impede on another player's area³</li>
-                <li>Do not utilize any game-breaking exploits⁴</li>
+                <li>No hacking</li>
+                <li>No game-breaking duplication</li>
+                <li>Do not impede on another player's area</li>
+                <li>Do not utilize any game-breaking exploits</li>
               </ul>
 
               <p class="rules-more">More details can be found on our Discord server.</p>
@@ -296,7 +321,7 @@
   </div>
 
   <script>
-    const players = [...]; // keep your list
+    const players = [];
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
