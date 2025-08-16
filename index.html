@@ -333,20 +333,57 @@
   </div>
 
   <script>
+    // Player list with full 42 players
     const players = [
       { username: "Unicornspice42", uuid: "6f4de73f-ce25-4deb-aeec-cd3dc77f336b" },
       { username: "lokm08", uuid: "4cdb1915-2693-4aa0-893c-edba7d2db2f1" },
       { username: "8oii", uuid: "74b1b59b-43a9-4f5f-b70c-5df43809a178" },
       { username: "lpwo", uuid: "98273cbc-0444-4db3-9c41-b2d0f3851478" },
       { username: "MrCookie894247", uuid: "ec3ca24e-9294-47f4-9ca4-eb3df9cf50ce" },
-      // … rest of players
+      { username: "Gabrielh7038123", uuid: "4d402ec8-8a23-4f44-aa2a-2b882a9dae69" },
+      { username: "Dank_dan", uuid: "b77010fe-6b3c-4ade-95d2-2a9e2938bbc8" },
+      { username: "Hypotemabus", uuid: "4a58b1de-7244-44af-9a5a-ee650618fab3" },
+      { username: "Megamon", uuid: "3ac6a488-bcfd-41ac-985f-ca36c3c0911d" },
+      { username: "_pengwing", uuid: "cae25195-27ee-497d-a5e3-8cd09694ba47" },
+      { username: "ElliePadd13", uuid: "2816111e-f6c2-4d27-948e-21a0f2b271d9" },
+      { username: "Swiftace630", uuid: "a0f96466-e97e-47f1-a0c2-f3b44fadd0b8" },
+      { username: "malay_sia", uuid: "727d3367-6a89-42de-907b-4dcea24a2f40" },
+      { username: "madeline0706", uuid: "3a71e91a-99ff-4987-bfa5-b8d225f8ece9" },
+      { username: "imtoolazytoo", uuid: "c477836e-c314-4553-8ed3-440fd7e9bf28" },
+      { username: "juniper_zero", uuid: "61571fbb-725a-43fa-a43e-c0b37821333a" },
+      { username: "EyesOfAWolf", uuid: "3ba4789a-0aa8-43c7-b1ca-af27d62b201b" },
+      { username: "SirSillee", uuid: "85647b1d-472c-476b-a46c-52639d274ffe" },
+      { username: "xDuds", uuid: "6c15e66c-6d8a-41e0-9641-23c2445547fe" },
+      { username: "Comrade_2099", uuid: "bf9db097-2c8e-4732-b2c4-d97faafb6228" },
+      { username: "DiamondRoseToy", uuid: "093d2e45-5f1d-4ab4-a2c8-ae5c71cd00dc" },
+      { username: "TerroristAndalu", uuid: "1b38c58d-f389-4f67-881b-6c45d76d99ec" },
+      { username: "Therm0o", uuid: "7d70290e-c32b-40bf-a8c0-a06efba7d601" },
+      { username: "Lukinftw", uuid: "a0ee34f0-1544-4b34-a6f7-639349b92ef5" },
+      { username: "TrueFoxtrot", uuid: "196e207e-e916-42af-a830-b09a40709729" },
+      { username: "tamolny", uuid: "a07c939e-76f1-4cd3-b695-6ae753557a58" },
+      { username: "glasscr0ss", uuid: "d73de33d-58ab-4159-8f22-251c0bb22cab" },
+      { username: "KayPtz", uuid: "912bd07f-98d8-406b-bfc5-82bafa7d0ee2" },
+      { username: "lostcause1", uuid: "d65da87a-6296-42f7-8148-e5732ae0ec4b" },
+      { username: "Recycled_Scraps", uuid: "013d3a42-76ab-436c-ad74-a4deb7ec7a79" },
+      { username: "unknownharlequin", uuid: "7fab3a1a-dda5-45fa-9f05-6477b34445f1" },
+      { username: "sulphuricIris333", uuid: "1e92af1e-6556-4086-804b-999643e73834" },
+      { username: "LolBoomSheep", uuid: "f66cd29b-60ed-456a-bc1b-158fc1595be3" },
+      { username: "Brandonzx3", uuid: "ca1a98ac-ec71-42cb-9fa7-b7d0f0c89038" },
+      { username: "DK60", uuid: "a9f3c038-01d8-4578-91bd-e32a085664e1" },
+      { username: "coxaflappin", uuid: "3ddcb8d6-7214-4195-b057-2c9365696115" },
+      { username: "HyperEh", uuid: "d1421c08-d807-4f72-a8fa-857215357176" },
+      { username: "SpadeBerserker", uuid: "bfba116a-8818-4acc-b301-240cc5f919e5" },
+      { username: "fransam", uuid: "cc3a7f43-9117-468e-98a8-62ce5e6fc30e" },
+      { username: "TheTaco2k", uuid: "2f89701f-fb7a-4922-92da-ca0e4c08eb56" },
+      { username: "el_djentleman", uuid: "baea9b51-72bd-4678-aed7-7a2c84fc2617" },
+      { username: "Link0765", uuid: "7c46532d-ba0d-4cb8-8ce5-733dd371e1d5" }
     ];
 
     // Dynamically load screenshots
     function loadScreenshots() {
       const track = document.getElementById('track');
       let screenshotIndex = 1;
-      let maxAttempts = 20;
+      let maxAttempts = 20; // Limit attempts to prevent infinite loop
       let loadedCount = 0;
       
       function checkForScreenshot(index) {
@@ -354,18 +391,24 @@
           console.log(`Loaded ${loadedCount} screenshots`);
           return;
         }
+        
         const img = new Image();
         img.onload = function() {
+          // Image exists, add it to the slider
           const slideDiv = document.createElement('div');
           slideDiv.className = 'slide';
           slideDiv.innerHTML = `<img src="scrn${index}.png" alt="Screenshot ${index}" loading="lazy">`;
           track.appendChild(slideDiv);
           loadedCount++;
-          if (loadedCount === 1) showSlide(0);
+          
+          // If this is the first slide, make it active
+          if (loadedCount === 1) slideDiv.classList.add('active');
+          
+          // Continue to next screenshot
           checkForScreenshot(index + 1);
         };
         img.onerror = function() {
-          console.log(`Loaded ${loadedCount} screenshots`);
+          console.log(`Screenshot scrn${index}.png not found, stopping`);
         };
         img.src = `scrn${index}.png`;
       }
@@ -373,67 +416,28 @@
       checkForScreenshot(screenshotIndex);
     }
 
-    function updateSliderHeight(img) {
-      const slider = document.getElementById('slider');
-      if (img.complete) {
-        slider.style.height = img.offsetHeight + 'px';
-      } else {
-        img.onload = () => slider.style.height = img.offsetHeight + 'px';
-      }
-    }
-
+    // Load player heads with hover sound
     function loadPlayerHeads() {
       const headsGrid = document.getElementById('headsGrid');
-      const hoverSound = new Audio('orb.mp3');
-      hoverSound.volume = 0.5;
+      const hoverSound = new Audio('hover.mp3');
+      hoverSound.volume = 0.2;
 
       players.forEach(player => {
-        const headDiv = document.createElement('div');
-        headDiv.className = 'head';
-        headDiv.innerHTML = `<img src="https://mc-heads.net/avatar/${player.username}/56" alt="${player.username}" title="${player.username}" loading="lazy">`;
-
-        headDiv.addEventListener('mouseenter', () => {
+        const div = document.createElement('div');
+        div.className = 'head';
+        div.innerHTML = `<img src="https://crafatar.com/avatars/${player.uuid}?size=64&overlay" alt="${player.username}">`;
+        div.title = player.username;
+        div.addEventListener('mouseenter', () => {
           hoverSound.currentTime = 0;
-          hoverSound.play().catch(e => console.log(e));
+          hoverSound.play().catch(()=>{});
         });
-
-        headsGrid.appendChild(headDiv);
-      });
-    }
-
-    function initSlider() {
-      const slides = document.querySelectorAll('.slide');
-      let currentSlide = 0;
-
-      if (slides.length === 0) return;
-
-      function showSlide(index) {
-        slides.forEach(slide => slide.classList.remove('active'));
-        slides[index].classList.add('active');
-        const img = slides[index].querySelector('img');
-        if (img) updateSliderHeight(img);
-      }
-
-      function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-      }
-
-      if (slides.length > 1) setInterval(nextSlide, 4000);
-
-      window.addEventListener('resize', () => {
-        const activeSlide = document.querySelector('.slide.active');
-        if (activeSlide) {
-          const img = activeSlide.querySelector('img');
-          if (img && img.complete) updateSliderHeight(img);
-        }
+        headsGrid.appendChild(div);
       });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      loadPlayerHeads();
       loadScreenshots();
-      setTimeout(() => initSlider(), 100);
+      loadPlayerHeads();
       document.getElementById('year').textContent = new Date().getFullYear();
     });
   </script>
