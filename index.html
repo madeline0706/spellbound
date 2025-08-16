@@ -316,11 +316,7 @@
           <h2>Screenshots</h2>
           <div class="slider" id="slider" aria-roledescription="carousel">
             <div class="track" id="track">
-              <div class="slide"><img src="https://i.ibb.co/XxY1YV6/scrn4.png" alt="The Stone Chicken" loading="lazy"></div>
-              <div class="slide"><img src="https://i.ibb.co/Q3fXxjt/scrn5.png" alt="Look at all those chickens..." loading="lazy"></div>
-              <div class="slide"><img src="https://i.ibb.co/LX1s0GD/scrn3.png" alt="Oh..." loading="lazy"></div>
-              <div class="slide"><img src="https://i.ibb.co/4wsMjPr/scrn2.png" alt="Who wants to play Pong?" loading="lazy"></div>
-              <div class="slide"><img src="https://i.ibb.co/Q3dqSSx/scrn1.png" alt="All hail..." loading="lazy"></div>
+              <!-- Screenshots will be dynamically loaded here -->
             </div>
           </div>
 
@@ -383,6 +379,60 @@
       { username: "Link0765", uuid: "7c46532d-ba0d-4cb8-8ce5-733dd371e1d5" }
     ];
 
+    // Dynamically load screenshots
+    function loadScreenshots() {
+      const track = document.getElementById('track');
+      let screenshotIndex = 1;
+      let maxAttempts = 20; // Limit attempts to prevent infinite loop
+      let loadedCount = 0;
+      
+      function checkForScreenshot(index) {
+        if (index > maxAttempts) {
+          console.log(`Loaded ${loadedCount} screenshots`);
+          return;
+        }
+        
+        const img = new Image();
+        img.onload = function() {
+          // Image exists, add it to the slider
+          const slideDiv = document.createElement('div');
+          slideDiv.className = 'slide';
+          slideDiv.innerHTML = `<img src="scrn${index}.png" alt="Screenshot ${index}" loading="lazy">`;
+          track.appendChild(slideDiv);
+          loadedCount++;
+          
+          // If this is the first image, show it
+          if (loadedCount === 1) {
+            slideDiv.classList.add('active');
+            updateSliderHeight(slideDiv.querySelector('img'));
+          }
+          
+          // Check for next screenshot
+          checkForScreenshot(index + 1);
+        };
+        img.onerror = function() {
+          // Image doesn't exist, stop checking
+          console.log(`Loaded ${loadedCount} screenshots`);
+        };
+        img.src = `scrn${index}.png`;
+      }
+      
+      // Start checking from scrn1.png
+      checkForScreenshot(screenshotIndex);
+    }
+
+    // Helper function to update slider height
+    function updateSliderHeight(img) {
+      const slider = document.getElementById('slider');
+      if (img.complete) {
+        slider.style.height = img.offsetHeight + 'px';
+      } else {
+        img.onload = () => {
+          slider.style.height = img.offsetHeight + 'px';
+        };
+      }
+    }
+
     // Populate player heads
     function loadPlayerHeads() {
       const headsGrid = document.getElementById('headsGrid');
@@ -401,22 +451,12 @@
       const slider = document.getElementById('slider');
       let currentSlide = 0;
 
-      if (slides.length === 0) return;
-
-      // Show first slide
-      slides[0].classList.add('active');
-      
-      // Calculate slider height based on first image
-      const firstImg = slides[0].querySelector('img');
-      if (firstImg) {
-        firstImg.onload = () => {
-          slider.style.height = firstImg.offsetHeight + 'px';
-        };
-        // If image is already loaded
-        if (firstImg.complete) {
-          slider.style.height = firstImg.offsetHeight + 'px';
-        }
+      if (slides.length === 0) {
+        console.log('No screenshots found');
+        return;
       }
+
+      console.log(`Initializing slider with ${slides.length} slides`);
 
       function showSlide(index) {
         slides.forEach(slide => slide.classList.remove('active'));
@@ -425,13 +465,7 @@
         // Update slider height for new image
         const img = slides[index].querySelector('img');
         if (img) {
-          if (img.complete) {
-            slider.style.height = img.offsetHeight + 'px';
-          } else {
-            img.onload = () => {
-              slider.style.height = img.offsetHeight + 'px';
-            };
-          }
+          updateSliderHeight(img);
         }
       }
 
@@ -440,8 +474,10 @@
         showSlide(currentSlide);
       }
 
-      // Auto-advance slides every 4 seconds
-      setInterval(nextSlide, 4000);
+      // Auto-advance slides every 4 seconds if there are multiple slides
+      if (slides.length > 1) {
+        setInterval(nextSlide, 4000);
+      }
 
       // Handle window resize
       window.addEventListener('resize', () => {
@@ -449,7 +485,7 @@
         if (activeSlide) {
           const img = activeSlide.querySelector('img');
           if (img && img.complete) {
-            slider.style.height = img.offsetHeight + 'px';
+            updateSliderHeight(img);
           }
         }
       });
@@ -459,9 +495,17 @@
     document.addEventListener('DOMContentLoaded', () => {
       console.log('DOM loaded, initializing...');
       console.log('Players list has', players.length, 'players');
-      console.log('First few players:', players.slice(0, 3));
+      
       loadPlayerHeads();
-      initSlider();
+      
+      // Load screenshots first, then initialize slider
+      loadScreenshots();
+      
+      // Wait a moment for screenshots to load, then initialize slider
+      setTimeout(() => {
+        initSlider();
+      }, 100);
+      
       document.getElementById('year').textContent = new Date().getFullYear();
     });
   </script>
