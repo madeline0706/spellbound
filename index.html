@@ -316,11 +316,11 @@
           <h2>Screenshots</h2>
           <div class="slider" id="slider" aria-roledescription="carousel">
             <div class="track" id="track">
-              <div class="slide"><img src="https://i.ibb.co/XxY1YV6y/scrn4.png" alt="The Stone Chicken" loading="lazy"></div>
-              <div class="slide"><img src="https://i.ibb.co/Q3fXxjtP/scrn5.png" alt="Look at all those chickens..." loading="lazy"></div>
-              <div class="slide"><img src="https://i.ibb.co/LX1s0GDz/scrn3.png" alt="Oh..." loading="lazy"></div>
-              <div class="slide"><img src="https://i.ibb.co/4wsMjPrq/scrn2.png" alt="Who wants to play Pong?" loading="lazy"></div>
-              <div class="slide"><img src="https://i.ibb.co/Q3dqSSxj/scrn1.png" alt="All hail..." loading="lazy"></div>
+              <div class="slide"><img src="https://i.ibb.co/XxY1YV6/scrn4.png" alt="The Stone Chicken" loading="lazy"></div>
+              <div class="slide"><img src="https://i.ibb.co/Q3fXxjt/scrn5.png" alt="Look at all those chickens..." loading="lazy"></div>
+              <div class="slide"><img src="https://i.ibb.co/LX1s0GD/scrn3.png" alt="Oh..." loading="lazy"></div>
+              <div class="slide"><img src="https://i.ibb.co/4wsMjPr/scrn2.png" alt="Who wants to play Pong?" loading="lazy"></div>
+              <div class="slide"><img src="https://i.ibb.co/Q3dqSSx/scrn1.png" alt="All hail..." loading="lazy"></div>
             </div>
           </div>
 
@@ -337,12 +337,50 @@
   </div>
 
   <script>
-    // Sample player list - replace with your actual players
+    // Player list with real UUIDs and usernames
     const players = [
-      'Notch', 'Herobrine', 'Steve', 'Alex', 'Jeb_', 'Dinnerbone', 
-      'Grumm', 'CaptainSparklez', 'DanTDM', 'StampyLongHead',
-      'PopularMMOs', 'Grian', 'MumboJumbo', 'Iskall85', 'GoodTimeWithScar',
-      'BdoubleO100', 'EthosLab', 'VintageBeef', 'PauseUnpause', 'Docm77'
+      { username: "Unicornspice42", uuid: "6f4de73f-ce25-4deb-aeec-cd3dc77f336b" },
+      { username: "lokm08", uuid: "4cdb1915-2693-4aa0-893c-edba7d2db2f1" },
+      { username: "8oii", uuid: "74b1b59b-43a9-4f5f-b70c-5df43809a178" },
+      { username: "lpwo", uuid: "98273cbc-0444-4db3-9c41-b2d0f3851478" },
+      { username: "MrCookie894247", uuid: "ec3ca24e-9294-47f4-9ca4-eb3df9cf50ce" },
+      { username: "Gabrielh7038123", uuid: "4d402ec8-8a23-4f44-aa2a-2b882a9dae69" },
+      { username: "Dank_dan", uuid: "b77010fe-6b3c-4ade-95d2-2a9e2938bbc8" },
+      { username: "Hypotemabus", uuid: "4a58b1de-7244-44af-9a5a-ee650618fab3" },
+      { username: "Megamon", uuid: "3ac6a488-bcfd-41ac-985f-ca36c3c0911d" },
+      { username: "_pengwing", uuid: "cae25195-27ee-497d-a5e3-8cd09694ba47" },
+      { username: "ElliePadd13", uuid: "2816111e-f6c2-4d27-948e-21a0f2b271d9" },
+      { username: "Swiftace630", uuid: "a0f96466-e97e-47f1-a0c2-f3b44fadd0b8" },
+      { username: "malay_sia", uuid: "727d3367-6a89-42de-907b-4dcea24a2f40" },
+      { username: "madeline0706", uuid: "3a71e91a-99ff-4987-bfa5-b8d225f8ece9" },
+      { username: "imtoolazytoo", uuid: "c477836e-c314-4553-8ed3-440fd7e9bf28" },
+      { username: "juniper_zero", uuid: "61571fbb-725a-43fa-a43e-c0b37821333a" },
+      { username: "EyesOfAWolf", uuid: "3ba4789a-0aa8-43c7-b1ca-af27d62b201b" },
+      { username: "SirSillee", uuid: "85647b1d-472c-476b-a46c-52639d274ffe" },
+      { username: "xDuds", uuid: "6c15e66c-6d8a-41e0-9641-23c2445547fe" },
+      { username: "Comrade_2099", uuid: "bf9db097-2c8e-4732-b2c4-d97faafb6228" },
+      { username: "DiamondRoseToy", uuid: "093d2e45-5f1d-4ab4-a2c8-ae5c71cd00dc" },
+      { username: "TerroristAndalu", uuid: "1b38c58d-f389-4f67-881b-6c45d76d99ec" },
+      { username: "Therm0o", uuid: "7d70290e-c32b-40bf-a8c0-a06efba7d601" },
+      { username: "Lukinftw", uuid: "a0ee34f0-1544-4b34-a6f7-639349b92ef5" },
+      { username: "TrueFoxtrot", uuid: "196e207e-e916-42af-a830-b09a40709729" },
+      { username: "tamolny", uuid: "a07c939e-76f1-4cd3-b695-6ae753557a58" },
+      { username: "glasscr0ss", uuid: "d73de33d-58ab-4159-8f22-251c0bb22cab" },
+      { username: "KayPtz", uuid: "912bd07f-98d8-406b-bfc5-82bafa7d0ee2" },
+      { username: "lostcause1", uuid: "d65da87a-6296-42f7-8148-e5732ae0ec4b" },
+      { username: "Recycled_Scraps", uuid: "013d3a42-76ab-436c-ad74-a4deb7ec7a79" },
+      { username: "unknownharlequin", uuid: "7fab3a1a-dda5-45fa-9f05-6477b34445f1" },
+      { username: "sulphuricIris333", uuid: "1e92af1e-6556-4086-804b-999643e73834" },
+      { username: "LolBoomSheep", uuid: "f66cd29b-60ed-456a-bc1b-158fc1595be3" },
+      { username: "Brandonzx3", uuid: "ca1a98ac-ec71-42cb-9fa7-b7d0f0c89038" },
+      { username: "DK60", uuid: "a9f3c038-01d8-4578-91bd-e32a085664e1" },
+      { username: "coxaflappin", uuid: "3ddcb8d6-7214-4195-b057-2c9365696115" },
+      { username: "HyperEh", uuid: "d1421c08-d807-4f72-a8fa-857215357176" },
+      { username: "SpadeBerserker", uuid: "bfba116a-8818-4acc-b301-240cc5f919e5" },
+      { username: "fransam", uuid: "cc3a7f43-9117-468e-98a8-62ce5e6fc30e" },
+      { username: "TheTaco2k", uuid: "2f89701f-fb7a-4922-92da-ca0e4c08eb56" },
+      { username: "el_djentleman", uuid: "baea9b51-72bd-4678-aed7-7a2c84fc2617" },
+      { username: "Link0765", uuid: "7c46532d-ba0d-4cb8-8ce5-733dd371e1d5" }
     ];
 
     // Populate player heads
@@ -351,7 +389,8 @@
       players.forEach(player => {
         const headDiv = document.createElement('div');
         headDiv.className = 'head';
-        headDiv.innerHTML = `<img src="https://mc-heads.net/avatar/${player}/56" alt="${player}" title="${player}" loading="lazy">`;
+        // Use username for display and avatar, UUID for internal identification
+        headDiv.innerHTML = `<img src="https://mc-heads.net/avatar/${player.username}/56" alt="${player.username}" title="${player.username}" loading="lazy">`;
         headsGrid.appendChild(headDiv);
       });
     }
@@ -419,8 +458,8 @@
     // Initialize everything when DOM is loaded
     document.addEventListener('DOMContentLoaded', () => {
       console.log('DOM loaded, initializing...');
-      console.log('Whitelist has', whitelistedPlayers.length, 'players');
-      console.log('First few players:', whitelistedPlayers.slice(0, 3));
+      console.log('Players list has', players.length, 'players');
+      console.log('First few players:', players.slice(0, 3));
       loadPlayerHeads();
       initSlider();
       document.getElementById('year').textContent = new Date().getFullYear();
