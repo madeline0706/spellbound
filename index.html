@@ -321,8 +321,91 @@
   </div>
 
   <script>
-    const players = [];
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // Sample player list - replace with your actual players
+    const players = [
+      'Notch', 'Herobrine', 'Steve', 'Alex', 'Jeb_', 'Dinnerbone', 
+      'Grumm', 'CaptainSparklez', 'DanTDM', 'StampyLongHead',
+      'PopularMMOs', 'Grian', 'MumboJumbo', 'Iskall85', 'GoodTimeWithScar',
+      'BdoubleO100', 'EthosLab', 'VintageBeef', 'PauseUnpause', 'Docm77'
+    ];
+
+    // Populate player heads
+    function loadPlayerHeads() {
+      const headsGrid = document.getElementById('headsGrid');
+      players.forEach(player => {
+        const headDiv = document.createElement('div');
+        headDiv.className = 'head';
+        headDiv.innerHTML = `<img src="https://mc-heads.net/avatar/${player}/56" alt="${player}" title="${player}" loading="lazy">`;
+        headsGrid.appendChild(headDiv);
+      });
+    }
+
+    // Image slider functionality
+    function initSlider() {
+      const slides = document.querySelectorAll('.slide');
+      const slider = document.getElementById('slider');
+      let currentSlide = 0;
+
+      if (slides.length === 0) return;
+
+      // Show first slide
+      slides[0].classList.add('active');
+      
+      // Calculate slider height based on first image
+      const firstImg = slides[0].querySelector('img');
+      if (firstImg) {
+        firstImg.onload = () => {
+          slider.style.height = firstImg.offsetHeight + 'px';
+        };
+        // If image is already loaded
+        if (firstImg.complete) {
+          slider.style.height = firstImg.offsetHeight + 'px';
+        }
+      }
+
+      function showSlide(index) {
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index].classList.add('active');
+        
+        // Update slider height for new image
+        const img = slides[index].querySelector('img');
+        if (img) {
+          if (img.complete) {
+            slider.style.height = img.offsetHeight + 'px';
+          } else {
+            img.onload = () => {
+              slider.style.height = img.offsetHeight + 'px';
+            };
+          }
+        }
+      }
+
+      function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+      }
+
+      // Auto-advance slides every 4 seconds
+      setInterval(nextSlide, 4000);
+
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        const activeSlide = document.querySelector('.slide.active');
+        if (activeSlide) {
+          const img = activeSlide.querySelector('img');
+          if (img && img.complete) {
+            slider.style.height = img.offsetHeight + 'px';
+          }
+        }
+      });
+    }
+
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      loadPlayerHeads();
+      initSlider();
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
   </script>
 </body>
 </html>
