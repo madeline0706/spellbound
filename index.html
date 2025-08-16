@@ -43,8 +43,7 @@
       max-width: 1000px;   
       width: 90%;          
       margin: 0 auto;   
-      border-radius: 12px; 
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      background: transparent;
     }
 
     /* Page wrap with sidebars */
@@ -55,6 +54,63 @@
     .sidebar{
       flex:1;
       background:var(--sidebar);
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* Sidebar decorations */
+    .sidebar-decoration {
+      position: absolute;
+      opacity: 0.1;
+      pointer-events: none;
+      font-size: 24px;
+      color: var(--accent);
+      font-family: 'Courier New', monospace;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .sidebar-decoration.left {
+      left: 20%;
+      animation-delay: 0s;
+    }
+
+    .sidebar-decoration.right {
+      right: 20%;
+      animation-delay: 3s;
+    }
+
+    .sidebar-decoration:nth-child(2) {
+      top: 30%;
+      animation-delay: 1s;
+    }
+
+    .sidebar-decoration:nth-child(3) {
+      top: 60%;
+      animation-delay: 2s;
+    }
+
+    .sidebar-decoration:nth-child(4) {
+      top: 80%;
+      animation-delay: 4s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.05; }
+      50% { transform: translateY(-20px) rotate(5deg); opacity: 0.15; }
+    }
+
+    /* Subtle grid pattern */
+    .sidebar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        linear-gradient(rgba(158, 203, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(158, 203, 255, 0.02) 1px, transparent 1px);
+      background-size: 20px 20px;
     }
     .wrap{
       flex:2;
@@ -259,7 +315,12 @@
   </div>
 
   <div class="page">
-    <div class="sidebar"></div>
+    <div class="sidebar">
+      <div class="sidebar-decoration left">⛏️</div>
+      <div class="sidebar-decoration left">🗡️</div>
+      <div class="sidebar-decoration left">💎</div>
+      <div class="sidebar-decoration left">🏰</div>
+    </div>
     <div class="wrap">
       <div class="layout">
         <div class="left">
